@@ -56,10 +56,8 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
     }
     
     func changeBackgroundColor() {
-        let randomRed = CGFloat(arc4random_uniform(249) + 1) / 250
-        let randomGreen = CGFloat(arc4random_uniform(249) + 1) / 250
-        let randomBlue = CGFloat(arc4random_uniform(249) + 1) / 250
-        self.view.backgroundColor = UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1)
+        var randomCGFloat: CGFloat {return CGFloat(arc4random_uniform(249) + 1) / 250}
+        self.view.backgroundColor = UIColor(red: randomCGFloat, green: randomCGFloat, blue: randomCGFloat, alpha: 1)
     }
     
     @IBAction func fahrenheitFieldEditingChanged(_ textField: UITextField) {
