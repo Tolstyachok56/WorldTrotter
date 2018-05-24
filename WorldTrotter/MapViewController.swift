@@ -9,27 +9,30 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController, MKMapViewDelegate {
+class MapViewController: UIViewController {
+    
+    var places: [Place] = [
+        Place(title: "Saint-Petersburg", coordinate: CLLocationCoordinate2D(latitude: 59.9342802, longitude: 30.3350986)),
+        Place(title: "San Francisco", coordinate: CLLocationCoordinate2D(latitude: 37.7749295, longitude: -122.4194155)),
+        Place(title: "Rome", coordinate: CLLocationCoordinate2D(latitude: 41.9027835, longitude: 12.4963655))
+    ]
+    var placeIndex = 0
     
     var mapView: MKMapView!
     var locationButton: UIButton!
+    var placeButton: UIButton!
     var locationManager: CLLocationManager!
     
     override func loadView() {
         mapView = MKMapView()
+        mapView.addAnnotations(places)
         mapView.delegate = self
         self.view = mapView
         
         locationManager = CLLocationManager()
         
         configureSegmentedControl()
-        configureLocationButton()
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        print("MapViewController loaded it's view.")
-        
+        configureButtons()
     }
     
     func configureSegmentedControl() {
@@ -63,31 +66,87 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func configureLocationButton() {
+    func configureButtons() {
         locationButton = UIButton()
         locationButton.setImage(UIImage(named: "Location"), for: .normal)
         locationButton.translatesAutoresizingMaskIntoConstraints = false
         locationButton.imageView?.contentMode = .scaleToFill
-        locationButton.addTarget(self, action: #selector(showLocation), for: .touchUpInside)
+        locationButton.addTarget(self, action: #selector(showUserLocation), for: .touchUpInside)
         self.view.addSubview(locationButton)
         
-        let trailingConstraint = locationButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor)
-        let bottomConstraint = locationButton.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor, constant: -25)
-        let widthConstraint = NSLayoutConstraint(item: locationButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 60)
-        let heightConstraint = NSLayoutConstraint(item: locationButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 60)
+        let margins = view.layoutMarginsGuide
         
-        trailingConstraint.isActive = true
-        bottomConstraint.isActive = true
-        widthConstraint.isActive = true
-        heightConstraint.isActive = true
+        let locationTrailingConstraint = locationButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+        let locationBottomConstraint = locationButton.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor, constant: -25)
+        let locationWidthConstraint = NSLayoutConstraint(item: locationButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 60)
+        let locationHeightConstraint = NSLayoutConstraint(item: locationButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 60)
+        
+        locationTrailingConstraint.isActive = true
+        locationBottomConstraint.isActive = true
+        locationWidthConstraint.isActive = true
+        locationHeightConstraint.isActive = true
+        
+        placeButton = UIButton()
+        placeButton.setImage(UIImage(named: "Places"), for: .normal)
+        placeButton.translatesAutoresizingMaskIntoConstraints = false
+        placeButton.imageView?.contentMode = .scaleToFill
+        placeButton.addTarget(self, action: #selector(showPlaceLocation), for: .touchUpInside)
+        self.view.addSubview(placeButton)
+        
+        let placeTrailingConstraint = placeButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+        let placeBottomConstraint = placeButton.bottomAnchor.constraint(equalTo: locationButton.topAnchor, constant: -10)
+        let placeWidthConstraint = NSLayoutConstraint(item: placeButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 60)
+        let placeHeightConstraint = NSLayoutConstraint(item: placeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 60)
+        
+        placeTrailingConstraint.isActive = true
+        placeBottomConstraint.isActive = true
+        placeWidthConstraint.isActive = true
+        placeHeightConstraint.isActive = true
     }
     
-   @objc func showLocation() {
+    @objc func showUserLocation() {
         locationManager.requestWhenInUseAuthorization()
         mapView.userTrackingMode = .follow
     }
     
+    @objc func showPlaceLocation() {
+        if !places.isEmpty {
+            let annotation = places[placeIndex]
+            mapView.setRegion(MKCoordinateRegionMakeWithDistance(annotation.coordinate, 500, 500), animated: true)
+            if placeIndex < places.count - 1{
+                placeIndex += 1
+            } else {
+                placeIndex = 0
+            }
+        }
+    }
+}
+
+extension MapViewController: MKMapViewDelegate {
+    
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         mapView.setRegion(MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 500, 500), animated: true)
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let pinAnnotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
+        switch annotation {
+        case is MKUserLocation:
+            pinAnnotationView.pinTintColor = MKPinAnnotationView.greenPinColor()
+        default:
+            break
+        }
+        return pinAnnotationView
+    }
+    
+}
+
+class Place: NSObject, MKAnnotation {
+    var title: String?
+    var coordinate: CLLocationCoordinate2D
+    
+    init(title: String, coordinate: CLLocationCoordinate2D) {
+        self.title = title
+        self.coordinate = coordinate
     }
 }
