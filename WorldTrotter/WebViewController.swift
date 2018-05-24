@@ -6,6 +6,7 @@
 //  Copyright © 2018 Виктория Бадисова. All rights reserved.
 //
 
+import UIKit
 import WebKit
 
 class WebViewController: UIViewController {
