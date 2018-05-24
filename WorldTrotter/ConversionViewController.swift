@@ -40,8 +40,8 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        switchDarkMode()
-        changeBackgroundColor()
+        switchDarkMode()
+//        changeBackgroundColor()
         super.viewWillAppear(animated)
     }
     
