@@ -43,6 +43,8 @@
 		046D47FE20B8155100D5A45F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		046D480020B8155700D5A45F /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		046D480120B8155900D5A45F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		046D480220B816F700D5A45F /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		046D480320B816F700D5A45F /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		04705FAD20B80EB700CC07F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		04705FAE20B80F2A00CC07F3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		0470D27520B5A9E100C2F7F0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -241,6 +243,7 @@
 				en,
 				Base,
 				es,
+				ru,
 			);
 			mainGroup = 04BBF0E120B5586200BFD768;
 			productRefGroup = 04BBF0EB20B5586200BFD768 /* Products */;
@@ -332,6 +335,7 @@
 				046D47FE20B8155100D5A45F /* en */,
 				046D480020B8155700D5A45F /* Base */,
 				046D480120B8155900D5A45F /* es */,
+				046D480320B816F700D5A45F /* ru */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -342,6 +346,7 @@
 				04BBF0F220B5586200BFD768 /* Base */,
 				04705FAD20B80EB700CC07F3 /* en */,
 				04705FAE20B80F2A00CC07F3 /* es */,
+				046D480220B816F700D5A45F /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
