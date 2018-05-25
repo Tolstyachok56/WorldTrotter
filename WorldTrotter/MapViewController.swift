@@ -32,8 +32,11 @@ class MapViewController: UIViewController {
         locationManager = CLLocationManager()
         
         configureSegmentedControl()
-        configureButtons()
+        configureUserLocationButton()
+        configurePlacesButton()
     }
+    
+    // MARK: - Configure UI
     
     func configureSegmentedControl() {
         let segmentedControl = UISegmentedControl(items: ["Standard", "Hybrid", "Satellite"])
@@ -48,10 +51,52 @@ class MapViewController: UIViewController {
         let leadingConstraint = segmentedControl.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
         let trailingConstraint = segmentedControl.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
         
-        topConstraint.isActive = true
-        leadingConstraint.isActive = true
-        trailingConstraint.isActive = true
+        activateConstraints([topConstraint, leadingConstraint, trailingConstraint])
     }
+    
+
+    
+    func configureUserLocationButton() {
+        locationButton = UIButton()
+        setButtonWithParameters(button: locationButton, iconName: "Location", targetSelector: #selector(showUserLocation))
+
+        let trailingConstraint = locationButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor)
+        let bottomConstraint = locationButton.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor, constant: -25)
+        let widthConstraint = NSLayoutConstraint(item: locationButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 60)
+        let heightConstraint = NSLayoutConstraint(item: locationButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 60)
+        
+        activateConstraints([trailingConstraint, bottomConstraint, widthConstraint, heightConstraint])
+    }
+    
+    func configurePlacesButton() {
+        placeButton = UIButton()
+        setButtonWithParameters(button: placeButton, iconName: "Places", targetSelector: #selector(showPlaceLocation))
+        
+        let trailingConstraint = placeButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor)
+        let bottomConstraint = placeButton.bottomAnchor.constraint(equalTo: locationButton.topAnchor, constant: -10)
+        let widthConstraint = NSLayoutConstraint(item: placeButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 60)
+        let heightConstraint = NSLayoutConstraint(item: placeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 60)
+        
+        activateConstraints([trailingConstraint, bottomConstraint, widthConstraint, heightConstraint])
+    }
+
+    func setButtonWithParameters(button: UIButton, iconName: String, targetSelector selector: Selector) {
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: iconName), for: .normal)
+        button.imageView?.contentMode = .scaleToFill
+        button.addTarget(self, action: selector, for: .touchUpInside)
+        self.view.addSubview(button)
+    }
+    
+    func activateConstraints(_ constraints: [NSLayoutConstraint]) {
+        if !constraints.isEmpty {
+            for constraint in constraints {
+                constraint.isActive = true
+            }
+        }
+    }
+    
+    //MARK: - Selectors
     
     @objc func mapTypeChanged(_ segControl: UISegmentedControl) {
         switch segControl.selectedSegmentIndex {
@@ -66,44 +111,6 @@ class MapViewController: UIViewController {
         }
     }
     
-    func configureButtons() {
-        locationButton = UIButton()
-        locationButton.setImage(UIImage(named: "Location"), for: .normal)
-        locationButton.translatesAutoresizingMaskIntoConstraints = false
-        locationButton.imageView?.contentMode = .scaleToFill
-        locationButton.addTarget(self, action: #selector(showUserLocation), for: .touchUpInside)
-        self.view.addSubview(locationButton)
-        
-        let margins = view.layoutMarginsGuide
-        
-        let locationTrailingConstraint = locationButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
-        let locationBottomConstraint = locationButton.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor, constant: -25)
-        let locationWidthConstraint = NSLayoutConstraint(item: locationButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 60)
-        let locationHeightConstraint = NSLayoutConstraint(item: locationButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 60)
-        
-        locationTrailingConstraint.isActive = true
-        locationBottomConstraint.isActive = true
-        locationWidthConstraint.isActive = true
-        locationHeightConstraint.isActive = true
-        
-        placeButton = UIButton()
-        placeButton.setImage(UIImage(named: "Places"), for: .normal)
-        placeButton.translatesAutoresizingMaskIntoConstraints = false
-        placeButton.imageView?.contentMode = .scaleToFill
-        placeButton.addTarget(self, action: #selector(showPlaceLocation), for: .touchUpInside)
-        self.view.addSubview(placeButton)
-        
-        let placeTrailingConstraint = placeButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
-        let placeBottomConstraint = placeButton.bottomAnchor.constraint(equalTo: locationButton.topAnchor, constant: -10)
-        let placeWidthConstraint = NSLayoutConstraint(item: placeButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 60)
-        let placeHeightConstraint = NSLayoutConstraint(item: placeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 60)
-        
-        placeTrailingConstraint.isActive = true
-        placeBottomConstraint.isActive = true
-        placeWidthConstraint.isActive = true
-        placeHeightConstraint.isActive = true
-    }
-    
     @objc func showUserLocation() {
         locationManager.requestWhenInUseAuthorization()
         mapView.userTrackingMode = .follow
@@ -112,14 +119,14 @@ class MapViewController: UIViewController {
     @objc func showPlaceLocation() {
         if !places.isEmpty {
             let annotation = places[placeIndex]
-            mapView.setRegion(MKCoordinateRegionMakeWithDistance(annotation.coordinate, 500, 500), animated: true)
-            if placeIndex < places.count - 1{
-                placeIndex += 1
-            } else {
+            mapView.setRegion(MKCoordinateRegionMakeWithDistance(annotation.coordinate, 1000, 1000), animated: true)
+            placeIndex += 1
+            if placeIndex == places.count {
                 placeIndex = 0
             }
         }
     }
+    
 }
 
 extension MapViewController: MKMapViewDelegate {
@@ -133,6 +140,8 @@ extension MapViewController: MKMapViewDelegate {
         switch annotation {
         case is MKUserLocation:
             pinAnnotationView.pinTintColor = MKPinAnnotationView.greenPinColor()
+        case is Place:
+            pinAnnotationView.pinTintColor = MKPinAnnotationView.purplePinColor()
         default:
             break
         }
