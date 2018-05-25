@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConversionViewController: UIViewController, UITextFieldDelegate {
+class ConversionViewController: UIViewController  {
     
     @IBOutlet var celsiusLabel: UILabel!
     @IBOutlet var textField: UITextField!
@@ -44,6 +44,8 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
     }
     
+    //MARK: - Configure UI
+    
     func switchDarkMode() {
         let date = Date()
         let hour = Calendar.current.component(.hour, from: date)
@@ -59,9 +61,19 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
         self.view.backgroundColor = UIColor(red: randomCGFloat, green: randomCGFloat, blue: randomCGFloat, alpha: 1)
     }
     
+    func updateCelsiusLabel() {
+        if let celsiusValue = celsiusValue {
+            celsiusLabel.text = numberFormatter.string(from: NSNumber(value: celsiusValue.value))
+        } else {
+            celsiusLabel.text = "???"
+        }
+    }
+    
+    //MARK: - IBActions
+    
     @IBAction func fahrenheitFieldEditingChanged(_ textField: UITextField) {
-        if let text = textField.text, let value = Double(text) {
-            fahrenheitValue = Measurement(value: value, unit: .fahrenheit)
+        if let text = textField.text, let value = numberFormatter.number(from: text) {
+            fahrenheitValue = Measurement(value: value.doubleValue, unit: .fahrenheit)
         } else {
             fahrenheitValue = nil
         }
@@ -71,19 +83,18 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
     }
     
-    func updateCelsiusLabel() {
-        if let celsiusValue = celsiusValue {
-            celsiusLabel.text = numberFormatter.string(from: NSNumber(value: celsiusValue.value))
-        } else {
-            celsiusLabel.text = "???"
-        }
-    }
+}
+
+extension ConversionViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let existingTextHasDecimalSeparator = textField.text?.range(of: ".")
-        let replacementTextHasDecimalSeparator = string.range(of: ".")
         
-        let allowedCharacterSet = CharacterSet(charactersIn: "0123456789.")
+        let currentLocale = Locale.current
+        let decimalSeparator = currentLocale.decimalSeparator ?? "."
+        let existingTextHasDecimalSeparator = textField.text?.range(of: decimalSeparator)
+        let replacementTextHasDecimalSeparator = string.range(of: decimalSeparator)
+        
+        let allowedCharacterSet = CharacterSet(charactersIn: "0123456789\(decimalSeparator)")
         let replacementCharacterSet = CharacterSet(charactersIn: string)
         
         if !replacementCharacterSet.isSubset(of: allowedCharacterSet) {
@@ -97,4 +108,5 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
             return true
         }
     }
+    
 }
