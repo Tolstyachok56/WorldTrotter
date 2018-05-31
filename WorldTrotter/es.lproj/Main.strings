@@ -17,8 +17,8 @@
 /* Class = "UILabel"; text = "is really"; ObjectID = "cAk-Yc-haw"; */
 "cAk-Yc-haw.text" = "es realmente";
 
-/* Class = "UITabBarItem"; title = "Web"; ObjectID = "omb-Nq-aWr"; */
-"omb-Nq-aWr.title" = "Web";
+/* Class = "UITabBarItem"; title = "BNR"; ObjectID = "omb-Nq-aWr"; */
+"omb-Nq-aWr.title" = "BNR";
 
 /* Class = "UILabel"; text = "degrees Fahrenheit"; ObjectID = "wIp-1w-6OO"; */
 "wIp-1w-6OO.text" = "grados Fahrenheit";

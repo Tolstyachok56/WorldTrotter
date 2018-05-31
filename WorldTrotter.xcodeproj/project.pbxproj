@@ -126,10 +126,8 @@
 			isa = PBXGroup;
 			children = (
 				04BBF0ED20B5586200BFD768 /* AppDelegate.swift */,
-				04409EBC20B582C7001A90D1 /* ConversionViewController.swift */,
-				0470D27720B5B09200C2F7F0 /* MapViewController.swift */,
+				04E122C220C02DB3002DA894 /* Controller */,
 				046D47FF20B8155100D5A45F /* Localizable.strings */,
-				048A635D20B6BFD20094C450 /* WebViewController.swift */,
 				04BBF0F120B5586200BFD768 /* Main.storyboard */,
 				04BBF0F420B5586300BFD768 /* Assets.xcassets */,
 				04BBF0F620B5586300BFD768 /* LaunchScreen.storyboard */,
@@ -154,6 +152,16 @@
 				04BBF10F20B5586300BFD768 /* Info.plist */,
 			);
 			path = WorldTrotterUITests;
+			sourceTree = "<group>";
+		};
+		04E122C220C02DB3002DA894 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				04409EBC20B582C7001A90D1 /* ConversionViewController.swift */,
+				0470D27720B5B09200C2F7F0 /* MapViewController.swift */,
+				048A635D20B6BFD20094C450 /* WebViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
